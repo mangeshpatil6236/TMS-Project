@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,26 +19,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.model.Branch;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.FileService;
 import com.example.demo.service.UserService;
+
+import jakarta.persistence.ManyToOne;
 
 @RestController
 public class UserController {
 
-	private final UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private FileService fileService;
 
 	@Autowired
 	private UserService us;
 
-	UserController(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
-
 	@PostMapping("add")
-	public String add(@RequestBody User u) {
+	public String add(@RequestPart("user") User u, @RequestPart("file") MultipartFile file) {
+
+		String uploadFile = this.fileService.uploadFile(file);
+		System.out.println("upload file name" + uploadFile);
+
+		u.setProfileUrl(uploadFile);
+
 		us.addUser(u);
 		return "User Added Successfully";
 	}
@@ -55,6 +69,13 @@ public class UserController {
 
 	@DeleteMapping("delete/{id}")
 	public String delete(@PathVariable Long id) {
+
+		User user = us.searchById(id);
+
+		if (user.getProfileUrl() != null && !user.getProfileUrl().isEmpty()) {
+			fileService.deleteFile(user.getProfileUrl());
+		}
+
 		us.deleteUser(id);
 		return "User Deleted Successfully";
 	}
@@ -77,8 +98,7 @@ public class UserController {
 		return new ResponseEntity<User>(result, HttpStatus.OK);
 	}
 
-	
-	//in this method we find current user login 
+	// in this method we find current user login
 	@PostMapping("profile")
 	public ResponseEntity<?> searchByEmail(Principal principal) {
 		String name = principal.getName();
@@ -94,11 +114,25 @@ public class UserController {
 		Pageable of = PageRequest.of(page, size, sort);
 		return this.userRepository.findAll(of);
 	}
-	
+
+	@GetMapping(value = "profilepicture", produces = MediaType.IMAGE_PNG_VALUE)
+	public byte[] userProfilePicture(Principal principal) {
+		String name = principal.getName();
+
+		User user = this.us.searchByEmail(name);
+		return this.fileService.getFile(user.getProfileUrl());
+	}
+
 //	@GetMapping("profile")
 //	public ResponseEntity<User> findCurrentLoginUser(Principal principal) {
 //		String name = principal.getName();
 //		this.us.searchByEmail(name)
 //;	}
 
+	
+	@GetMapping("finduserbybranch/{title}")
+	public List<User> searchUserByBranch(@PathVariable String title){
+		return us.searchUserByBranch(title);
+	}
+	
 }

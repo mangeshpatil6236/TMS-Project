@@ -1,7 +1,6 @@
  package com.example.demo.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +11,7 @@ import com.example.demo.Exception.IdNotFound;
 import com.example.demo.Exception.NameNotFound;
 import com.example.demo.Exception.RoleNotFound;
 import com.example.demo.model.User;
+import com.example.demo.repository.BranchRepository;
 import com.example.demo.repository.UserRepository;
 
 @Service
@@ -23,9 +23,13 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private PasswordEncoder passeEncoder;
 	
+	@Autowired
+	private BranchRepository branchRepo;
+	
 	@Override
 	public void addUser(User u) {
 		// TODO Auto-generated method stub
+		 
 		u.setPassword(passeEncoder.encode(u.getPassword()));
 		ur.save(u);
 	}
@@ -85,6 +89,16 @@ public class UserServiceImpl implements UserService{
 		return ur.findByEmail(email);
 	}
 
+	@Override
+	public List<User> searchUserByBranch(String title) {
+		// TODO Auto-generated method stub
+		List<User> users = ur.findByBranch_Title(title);
+		
+		if(users.isEmpty()) {
+			 throw new NameNotFound("No Users Found with this Branch"+title);
+		}
+		return users;
+	}
 
 	
 }

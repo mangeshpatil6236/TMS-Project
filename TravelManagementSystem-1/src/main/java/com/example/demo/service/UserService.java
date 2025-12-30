@@ -22,6 +22,8 @@ public interface UserService {
 
 	User searchByEmail(String email);
 
+	List<User> searchUserByBranch(String title);
+
 	 
 
 }

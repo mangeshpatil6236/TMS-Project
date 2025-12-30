@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Branch;
 import com.example.demo.model.Status;
+import com.example.demo.model.User;
 import com.example.demo.repository.BranchRepository;
 import com.example.demo.service.BranchService;
+
+import jakarta.persistence.OneToMany;
 
 @RestController
 public class BranchController {
@@ -75,4 +78,7 @@ public class BranchController {
 		Pageable of = PageRequest.of(page, size, sort);
 		return this.br.findAll(of);
 	}
+	
+	
+	
 }

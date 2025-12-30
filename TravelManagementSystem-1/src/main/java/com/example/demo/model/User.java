@@ -8,10 +8,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +37,15 @@ public class User implements UserDetails {
 	private String mobile;
 	private String role;
 	private String status;
-
+	private String profileUrl;
+	
+	@OneToOne(mappedBy = "user")
+	@JsonIgnore
+	private Document document;
+	
+	@ManyToOne
+	private Branch branch;
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
@@ -54,4 +66,6 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return this.email;
 	}
+	
+	
 }

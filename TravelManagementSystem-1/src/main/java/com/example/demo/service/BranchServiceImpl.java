@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.Exception.IdNotFound;
 import com.example.demo.model.Branch;
+import com.example.demo.model.User;
 import com.example.demo.repository.BranchRepository;
+import com.example.demo.repository.UserRepository;
 
 @Service
 public class BranchServiceImpl implements BranchService {
 
 	@Autowired
 	private BranchRepository branchrepository;
+	
 
 	@Override
 	public void addBranch(Branch branch) {
@@ -24,6 +27,7 @@ public class BranchServiceImpl implements BranchService {
 	@Override
 	public List<Branch> displayBranch() {
 		// TODO Auto-generated method stub
+		
 		return branchrepository.findAll();
 	}
 

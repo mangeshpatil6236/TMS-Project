@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,4 +33,8 @@ public class Branch {
 	
 	@Enumerated(EnumType.STRING)
 	private Status status;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "branch")
+	private List<User> user;
 }
