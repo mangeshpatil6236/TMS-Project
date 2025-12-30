@@ -29,6 +29,14 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void addUser(User u) {
 		// TODO Auto-generated method stub
+		
+		if(ur.existsByEmail(u.getEmail())) {
+			throw new RuntimeException("User Already Exists With this Email...!");
+		}
+		
+		if(ur.existsByMobile(u.getMobile())) {
+			throw new RuntimeException("User Already Exists with this Mobile Number");
+		}
 		 
 		u.setPassword(passeEncoder.encode(u.getPassword()));
 		ur.save(u);

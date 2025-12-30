@@ -25,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	List<User> findByBranch_Title(String title);
 
+	boolean existsByMobile(String mobile);
+
 }

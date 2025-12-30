@@ -9,4 +9,9 @@ import com.example.demo.model.Branch;
 @Repository
 public interface BranchRepository extends JpaRepository<Branch, Long>{
 
+	boolean existsByTitle(String title);
+
+	boolean existsByLocation(String location);
+
 }
+  

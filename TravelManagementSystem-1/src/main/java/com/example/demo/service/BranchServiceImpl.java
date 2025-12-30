@@ -21,6 +21,15 @@ public class BranchServiceImpl implements BranchService {
 	@Override
 	public void addBranch(Branch branch) {
 		// TODO Auto-generated method stub
+		
+		if(branchrepository.existsByTitle(branch.getTitle())) {
+			throw new RuntimeException("Branch Title is already Exists...!");
+		}
+		
+		if(branchrepository.existsByLocation(branch.getLocation())) {
+			throw new RuntimeException("Branch Location is already Exists...!");
+		}
+		
 		branchrepository.save(branch);
 	}
 

@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,13 +22,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.model.Branch;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FileService;
 import com.example.demo.service.UserService;
-
-import jakarta.persistence.ManyToOne;
 
 @RestController
 public class UserController {
@@ -44,15 +40,22 @@ public class UserController {
 	private UserService us;
 
 	@PostMapping("add")
-	public String add(@RequestPart("user") User u, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> add(@RequestPart("user") User u, @RequestPart("file") MultipartFile file) {
 
-		String uploadFile = this.fileService.uploadFile(file);
-		System.out.println("upload file name" + uploadFile);
+		try {
+			String uploadFile = this.fileService.uploadFile(file);
+			System.out.println("upload file name" + uploadFile);
 
-		u.setProfileUrl(uploadFile);
+			u.setProfileUrl(uploadFile);
 
-		us.addUser(u);
-		return "User Added Successfully";
+			us.addUser(u);
+			return  ResponseEntity.ok("User Added Successfully");
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body(e.getMessage());
+		}
 	}
 
 	@GetMapping("display")

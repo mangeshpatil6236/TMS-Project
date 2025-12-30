@@ -38,14 +38,22 @@ public class BranchController {
 	private BranchRepository br;
 
 	@PostMapping("addbranch")
-	public String add(@RequestBody Branch branch, Principal principal) {
-		String name = principal.getName();
-		branch.setCreatedBy(name);
-		branch.setCreatedAt(new Date());
-		branch.setStatus(Status.ACTIVE);
+	public ResponseEntity<?> add(@RequestBody Branch branch, Principal principal) {
 
-		branchservice.addBranch(branch);
-		return "Branch add Successfully..";
+		try {
+			String name = principal.getName();
+			branch.setCreatedBy(name);
+			branch.setCreatedAt(new Date());
+			branch.setStatus(Status.ACTIVE);
+
+			branchservice.addBranch(branch);
+			return ResponseEntity.ok("Branch add Successfully..");
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body(e.getMessage());
+		}
 	}
 
 	@GetMapping("displaybranch")
@@ -78,7 +86,5 @@ public class BranchController {
 		Pageable of = PageRequest.of(page, size, sort);
 		return this.br.findAll(of);
 	}
-	
-	
-	
+
 }
