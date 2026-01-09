@@ -57,12 +57,16 @@ public class DocumentServiceImpl implements FileService {
 		Path file = Paths.get(path).resolve(filename);
 
 		try {
-			Files.deleteIfExists(file);
+			if(Files.deleteIfExists(file)) {
+				return "File Deleted Successfully..👍";
+			}else {
+				return "File Not Found";
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return "Error While Deleting File";
 		}
-		return "File Deleted Successfully..👍";
+		 
 	}
 
 

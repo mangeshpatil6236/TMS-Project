@@ -40,7 +40,7 @@ public class DocumentUploadController {
 	}
 	
 	@DeleteMapping("/{filename}")
-	public ResponseEntity<String> deletFile(@PathVariable String filename){
+	public ResponseEntity<String> deleteFile(@PathVariable String filename){
 		String message = this.fileservice.deleteFile(filename);
 		
 		return new ResponseEntity<String>(message, HttpStatus.OK);

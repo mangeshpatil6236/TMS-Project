@@ -27,6 +27,8 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FileService;
 import com.example.demo.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class UserController {
 
@@ -40,7 +42,7 @@ public class UserController {
 	private UserService us;
 
 	@PostMapping("add")
-	public ResponseEntity<?> add(@RequestPart("user") User u, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> add(@Valid @RequestPart("user") User u, @RequestPart("file") MultipartFile file) {
 
 		try {
 			String uploadFile = this.fileService.uploadFile(file);
@@ -53,7 +55,7 @@ public class UserController {
 		} catch (RuntimeException e) {
 			// TODO: handle exception
 			return ResponseEntity
-					.status(HttpStatus.OK)
+					.status(HttpStatus.CONFLICT)
 					.body(e.getMessage());
 		}
 	}

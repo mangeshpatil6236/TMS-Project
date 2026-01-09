@@ -27,6 +27,7 @@ import com.example.demo.repository.BranchRepository;
 import com.example.demo.service.BranchService;
 
 import jakarta.persistence.OneToMany;
+import jakarta.validation.Valid;
 
 @RestController
 public class BranchController {
@@ -38,7 +39,7 @@ public class BranchController {
 	private BranchRepository br;
 
 	@PostMapping("addbranch")
-	public ResponseEntity<?> add(@RequestBody Branch branch, Principal principal) {
+	public ResponseEntity<?> add(@Valid @RequestBody Branch branch, Principal principal) {
 
 		try {
 			String name = principal.getName();
@@ -51,7 +52,7 @@ public class BranchController {
 		} catch (RuntimeException e) {
 			// TODO: handle exception
 			return ResponseEntity
-					.status(HttpStatus.OK)
+					.status(HttpStatus.CONFLICT)
 					.body(e.getMessage());
 		}
 	}

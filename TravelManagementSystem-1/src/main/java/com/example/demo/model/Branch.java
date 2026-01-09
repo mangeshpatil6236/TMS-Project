@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,9 @@ public class Branch {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@NotBlank(message="Title cannot be Empty !")
 	private String title;
+	@NotBlank(message = "Location cannot be Empty !")
 	private String location;
 	private Date createdAt;
 	private String createdBy;
@@ -37,4 +40,8 @@ public class Branch {
 	@JsonIgnore
 	@OneToMany(mappedBy = "branch")
 	private List<User> user;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "brand")
+	private List<Vehicle> vehicle;
 }

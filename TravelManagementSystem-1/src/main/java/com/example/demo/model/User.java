@@ -16,6 +16,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,10 +33,19 @@ public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@NotBlank(message="Name Cannot be Empty !")
 	private String name;
+	@Email(message="Invalid Email !")
+	@Pattern(regexp = "^[a-zA-Z0-9._%+-]+@gmail\\.com$", message = "Email end with @gmail.com.")
+	@NotBlank
 	private String email;
+	@NotBlank
+	@Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%&+=!]).{8,}$", message = "Password must be at least 8 characters and includes one uppercase, lowercase, number and special symbol")
 	private String password;
+	@NotBlank(message="Address cannot be Empty !")
 	private String address;
+	@Pattern(regexp = "^[6-9]\\d{9}$", message = "INVALID MOBILE NUMBER")
+	@NotBlank(message="Mobile Cannot be Empty !")
 	private String mobile;
 	private String role;
 	private String status;

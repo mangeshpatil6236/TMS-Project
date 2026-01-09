@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
 		if(ur.existsByMobile(u.getMobile())) {
 			throw new RuntimeException("User Already Exists with this Mobile Number");
 		}
-		 
+		
 		u.setPassword(passeEncoder.encode(u.getPassword()));
 		ur.save(u);
 	}

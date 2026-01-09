@@ -1,0 +1,15 @@
+package com.example.demo.Exception;
+
+//cannot used
+
+public class MethodArgumentNotValidException extends RuntimeException{
+	public MethodArgumentNotValidException(String msg) {
+		super(msg);
+	}
+
+	public Object getBindingResult() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
